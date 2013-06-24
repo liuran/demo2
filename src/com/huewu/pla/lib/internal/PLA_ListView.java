@@ -37,7 +37,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
-import com.huewu.pla.sample.R;
+import com.example.demo2.R;
 
 /*
  * Implementation Notes:
@@ -802,6 +802,7 @@ public class PLA_ListView extends PLA_AbsListView {
 	 *         UNSPECIFIED/AT_MOST modes, false otherwise.
 	 * @hide
 	 */
+	@ViewDebug.ExportedProperty(category = "list")
 	protected boolean recycleOnMeasure() {
 		return true;
 	}
@@ -1066,6 +1067,7 @@ public class PLA_ListView extends PLA_AbsListView {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void layoutChildren() {
 		final boolean blockLayoutRequests = mBlockLayoutRequests;
@@ -1283,6 +1285,7 @@ public class PLA_ListView extends PLA_AbsListView {
 	 * @param selected Is this position selected?
 	 * @return View that was added
 	 */
+	@SuppressWarnings("deprecation")
 	private View makeAndAddView(int position, int childrenBottomOrTop, boolean flow,
 			boolean selected) {
 		View child;
