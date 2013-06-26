@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch(item.getItemId()){
-		case 1001:
+		case 1001:  // 判断是否点击了瀑布流列表。
 		{
 			int startCount = mAdapter.getCount();
 			for( int i = 0; i < 100; ++i){
@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
 			}
 		}
 		break;
-		case 1002:
+		case 1002:  // 判断是否打开下拉刷新的页面。
 		{
 			Intent intent = new Intent(this, PullToRefreshSampleActivity.class);
 			startActivity(intent);
@@ -98,11 +98,10 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume() {  // Resume 事件在应用恢复到活动状态时调用。
 		super.onResume();
 		initAdapter();
 		mAdapterView.setAdapter(mAdapter);
-		//mAdapterView.setAdapter(mAdapter);
 	}
 
 	private Random mRand = new Random();
