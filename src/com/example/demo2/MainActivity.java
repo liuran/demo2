@@ -7,61 +7,61 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.huewu.pla.lib.MultiColumnListView;
+import com.huewu.pla.lib.MultiColumnListView.OnLoadMoreListener;
 import com.huewu.pla.lib.internal.PLA_AbsListView.LayoutParams;
-import com.huewu.pla.sample.extra.PullToRefreshSampleActivity;
+import com.example.demo2.PullToRefreshSampleActivity;
+
+import com.example.demo2.ImgResource;
+import com.example.demo2.SimpleViewBuilder;
+import com.example.lib.ImageWrapper;
+import com.lurencun.android.adapter.AbstractAdapter;
+import com.lurencun.android.adapter.CommonAdapter;
+import com.lurencun.android.system.ActivityUtil;
 import com.example.demo2.R;
 
 public class MainActivity extends Activity {
-
-
-	private class MySimpleAdapter extends ArrayAdapter<String> {
-
-		public MySimpleAdapter(Context context, int layoutRes) {
-			super(context, layoutRes, android.R.id.text1);
-		}
-	}
-
+	
+	protected AbstractAdapter<ImageWrapper> mAdapter = null;
 	private MultiColumnListView mAdapterView = null;
-	private MySimpleAdapter mAdapter = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		//mAdapterView = (PLA_AdapterView<Adapter>) findViewById(R.id.list);
-
+		setContentView(R.layout.act_sample);
 		mAdapterView = (MultiColumnListView) findViewById(R.id.list);
-
-		{
-			for( int i = 0; i < 3; ++i ){
-				//add header view.
-				TextView tv = new TextView(this);
-				tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				tv.setText("Hello Header!! ........................................................................");
-				mAdapterView.addHeaderView(tv);
+		
+		initAdapter();
+		mAdapterView.setAdapter(mAdapter);
+		mAdapterView.setOnLoadMoreListener(new OnLoadMoreListener() {
+			@Override
+			public void onLoadMore() {
+				mAdapter.add(ImgResource.genData());
+				ActivityUtil.show(MainActivity.this, "è½½å…¥å›¾åƒåˆ—è¡¨");
+				
+				new Handler().postDelayed(new Runnable(){
+					@Override
+					public void run() {
+						mAdapterView.onLoadMoreComplete();
+					}
+				}, 5000);
 			}
-		}
-		{
-			for( int i = 0; i < 3; ++i ){
-				//add footer view.
-				TextView tv = new TextView(this);
-				tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-				tv.setText("Hello Footer!! ........................................................................");
-				mAdapterView.addFooterView(tv);
-			}
-		}
+		});
 	}
+	
+	public static final int PULL_TO_HOME_ID = 1010;
+	public static final int PULL_TO_REFRESH_ID = 1011;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, 1001, 0, "Load More Contents");
-		menu.add(Menu.NONE, 1002, 0, "Launch Pull-To-Refresh Activity");
+		menu.add(Menu.NONE, PULL_TO_HOME_ID, 0,"è½½å…¥å›¾åƒ");
+		menu.add(Menu.NONE, PULL_TO_REFRESH_ID, 0, "è½½å…¥æ–‡æ¡ˆ");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -69,27 +69,16 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch(item.getItemId()){
-		case 1001:  // ÅÐ¶ÏÊÇ·ñµã»÷ÁËÆÙ²¼Á÷ÁÐ±í¡£
+		case PULL_TO_HOME_ID:
 		{
-			int startCount = mAdapter.getCount();
-			for( int i = 0; i < 100; ++i){
-				//generate 100 random items.
-
-				StringBuilder builder = new StringBuilder();
-				builder.append("Hello!![");
-				builder.append(startCount + i);
-				builder.append("] ");
-
-				char[] chars = new char[mRand.nextInt(100)];
-				Arrays.fill(chars, '1');
-				builder.append(chars);
-				mAdapter.add(builder.toString());
-			}
+			Intent intent =new Intent(MainActivity.this, MainActivity.class);
+			startActivity(intent);
 		}
 		break;
-		case 1002:  // ÅÐ¶ÏÊÇ·ñ´ò¿ªÏÂÀ­Ë¢ÐÂµÄÒ³Ãæ¡£
+
+		case PULL_TO_REFRESH_ID:  // åˆ¤æ–­æ˜¯å¦æ‰“å¼€ä¸‹æ‹‰åˆ·æ–°çš„é¡µé¢ã€‚
 		{
-			Intent intent = new Intent(this, PullToRefreshSampleActivity.class);
+			Intent intent = new Intent(MainActivity.this, PullToRefreshSampleActivity.class);
 			startActivity(intent);
 		}
 		break;
@@ -98,30 +87,15 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onResume() {  // Resume ÊÂ¼þÔÚÓ¦ÓÃ»Ö¸´µ½»î¶¯×´Ì¬Ê±µ÷ÓÃ¡£
+	protected void onResume() {  // Resume äº‹ä»¶åœ¨åº”ç”¨æ¢å¤åˆ°æ´»åŠ¨çŠ¶æ€æ—¶è°ƒç”¨ã€‚
 		super.onResume();
 		initAdapter();
 		mAdapterView.setAdapter(mAdapter);
 	}
 
-	private Random mRand = new Random();
-	private void initAdapter() {
-		mAdapter = new MySimpleAdapter(this, R.layout.item_sample);
-
-		for( int i = 0; i < 30; ++i){
-			//generate 30 random items.
-
-			StringBuilder builder = new StringBuilder();
-			builder.append("Hello!![");
-			builder.append(i);
-			builder.append("] ");
-
-			char[] chars = new char[mRand.nextInt(500)];
-			Arrays.fill(chars, '1');
-			builder.append(chars);
-			mAdapter.add(builder.toString());
-		}
-
+	protected void initAdapter() {
+		mAdapter = new CommonAdapter<ImageWrapper>(getLayoutInflater(), new SimpleViewBuilder());
+		mAdapter.update(ImgResource.genData());
 	}
 
 }//end of class

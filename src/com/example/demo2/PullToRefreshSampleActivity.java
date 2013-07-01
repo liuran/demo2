@@ -1,4 +1,4 @@
-package com.huewu.pla.sample.extra;
+package com.example.demo2;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
 import com.huewu.pla.lib.internal.PLA_AdapterView;
-import com.huewu.pla.sample.extra.PullToRefreshSampleActivity;
 import com.example.demo2.R;
 
 public class PullToRefreshSampleActivity extends Activity {
@@ -37,9 +36,13 @@ public class PullToRefreshSampleActivity extends Activity {
 		mAdapterView = (PLA_AdapterView<ListAdapter>) findViewById(R.id.list);
 	}
 
+	public static final int PULL_TO_HOME_ID = 1010;
+	public static final int PULL_TO_REFRESH_ID = 1011;
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, 1001, 0, "Load More Contents");
+		menu.add(Menu.NONE, PULL_TO_HOME_ID, 0,"载入图像");
+		menu.add(Menu.NONE, PULL_TO_REFRESH_ID, 0, "载入文案");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -47,27 +50,16 @@ public class PullToRefreshSampleActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch(item.getItemId()){
-		case 1001:
+		case PULL_TO_HOME_ID:
 		{
-			int startCount = mAdapter.getCount();
-			for( int i = 0; i < 100; ++i){
-				//generate 100 random items.
-
-				StringBuilder builder = new StringBuilder();
-				builder.append("Hello!![");
-				builder.append(startCount + i);
-				builder.append("] ");
-
-				char[] chars = new char[mRand.nextInt(100)];
-				Arrays.fill(chars, '1');
-				builder.append(chars);
-				mAdapter.add(builder.toString());
-			}
+			Intent intent =new Intent(PullToRefreshSampleActivity.this, MainActivity.class);
+			startActivity(intent);
 		}
 		break;
-		case 1002:
+
+		case PULL_TO_REFRESH_ID:  // 判断是否打开下拉刷新的页面。
 		{
-			Intent intent = new Intent(this, PullToRefreshSampleActivity.class);
+			Intent intent = new Intent(PullToRefreshSampleActivity.this, PullToRefreshSampleActivity.class);
 			startActivity(intent);
 		}
 		break;
