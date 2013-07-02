@@ -26,7 +26,7 @@ public class ImgResource {
 		for (int i = 0; i < count; i++) {
 			ImageWrapper iw = new ImageWrapper();
 			iw.width = 230;
-			iw.height = 230 + i * 20;
+			iw.height = 10;
 			iw.id = i;
 			iw.res = ImgResource.imageResource[i];
 			data.add(iw);

@@ -40,9 +40,13 @@ public class SimpleViewBuilder extends ViewBuilder<ImageWrapper> {
 				.getLayoutParams();
 		params.width = data.width;
 		params.height = data.height;
+		// 根据宽度调整view区域的高度，
+		params.height = data.get2Height();
+		
 		image.setLayoutParams(params);
 		image.setAdjustViewBounds(false);
 		image.setBackgroundColor((int) (0xFF555555 + data.id * 255 * 24));
+		
 		image.setImageResource(data.res);
 		image.invalidate();
 	}
