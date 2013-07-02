@@ -11,8 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
+import com.huewu.pla.lib.MultiColumnListView;
 import com.huewu.pla.lib.internal.PLA_AdapterView;
+import com.huewu.pla.lib.internal.PLA_AbsListView.LayoutParams;
 import com.example.demo2.R;
 
 public class PullToRefreshSampleActivity extends Activity {
@@ -20,20 +23,38 @@ public class PullToRefreshSampleActivity extends Activity {
 	private class MySimpleAdapter extends ArrayAdapter<String> {
 
 		public MySimpleAdapter(Context context, int layoutRes) {
-			super(context, layoutRes, android.R.id.text1);
+			super(context, layoutRes, R.id.text);
 		}
 	}
 
-	private PLA_AdapterView<ListAdapter> mAdapterView = null;
+	private MultiColumnListView mAdapterView = null;
 	private MySimpleAdapter mAdapter = null;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_pull_to_refresh_sample);
-		//mAdapterView = (PLA_AdapterView<Adapter>) findViewById(R.id.list);
-		mAdapterView = (PLA_AdapterView<ListAdapter>) findViewById(R.id.list);
+		setContentView(R.layout.act_sample);
+		
+		mAdapterView = (MultiColumnListView) findViewById(R.id.list);
+		{
+			for( int i = 0; i < 3; ++i ){
+				//add header view.
+				TextView tv = new TextView(this);
+				tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				tv.setText("Hello Header!! ........................................................................");
+				mAdapterView.addHeaderView(tv);
+			}
+		}
+		{
+			for( int i = 0; i < 3; ++i ){
+				//add footer view.
+				TextView tv = new TextView(this);
+				tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+				tv.setText("Hello Footer!! ........................................................................");
+				mAdapterView.addFooterView(tv);
+			}
+		}
 	}
 
 	public static final int PULL_TO_HOME_ID = 1010;
@@ -48,23 +69,22 @@ public class PullToRefreshSampleActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		switch(item.getItemId()){
 		case PULL_TO_HOME_ID:
 		{
-			Intent intent =new Intent(PullToRefreshSampleActivity.this, MainActivity.class);
+			Intent intent =new Intent(this, MainActivity.class);
 			startActivity(intent);
 		}
 		break;
 
 		case PULL_TO_REFRESH_ID:  // 判断是否打开下拉刷新的页面。
 		{
-			Intent intent = new Intent(PullToRefreshSampleActivity.this, PullToRefreshSampleActivity.class);
+			Intent intent = new Intent(this, PullToRefreshSampleActivity.class);
 			startActivity(intent);
 		}
 		break;
 		}
-		return true;
+			return true;
 	}
 
 	@Override
@@ -72,7 +92,6 @@ public class PullToRefreshSampleActivity extends Activity {
 		super.onResume();
 		initAdapter();
 		mAdapterView.setAdapter(mAdapter);
-		//mAdapterView.setAdapter(mAdapter);
 	}
 
 	private Random mRand = new Random();

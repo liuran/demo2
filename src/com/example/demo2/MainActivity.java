@@ -37,6 +37,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.act_sample);
 		mAdapterView = (MultiColumnListView) findViewById(R.id.list);
 		
+		this.setTitle("测试");
+		
 		initAdapter();
 		mAdapterView.setAdapter(mAdapter);
 		mAdapterView.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -71,14 +73,14 @@ public class MainActivity extends Activity {
 		switch(item.getItemId()){
 		case PULL_TO_HOME_ID:
 		{
-			Intent intent =new Intent(MainActivity.this, MainActivity.class);
+			Intent intent =new Intent(this, MainActivity.class);
 			startActivity(intent);
 		}
 		break;
 
 		case PULL_TO_REFRESH_ID:  // 判断是否打开下拉刷新的页面。
 		{
-			Intent intent = new Intent(MainActivity.this, PullToRefreshSampleActivity.class);
+			Intent intent = new Intent(this, PullToRefreshSampleActivity.class);
 			startActivity(intent);
 		}
 		break;
